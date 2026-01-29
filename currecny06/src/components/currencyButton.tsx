@@ -5,10 +5,11 @@ import type { PropsWithChildren } from 'react'
 type currencyType = PropsWithChildren<{ // defining type for props
     flag: string,
     countryName: string,
-    currencyConverter: number
+    currencyConverter: number,
+    children?: React.ReactNode
 }>
 
-const currencyComp =(props:currencyType)=>{ // currency component
+const CurrencyComp =(props:currencyType)=>{ // currency component
   return(
     <View style={styles.buttonContainer}>
       <Text style={styles.flag}>{props.flag}</Text>
@@ -18,7 +19,7 @@ const currencyComp =(props:currencyType)=>{ // currency component
 }
 
 
-export default currencyComp;
+export default CurrencyComp;
 
 const styles = StyleSheet.create({
     buttonContainer : {
