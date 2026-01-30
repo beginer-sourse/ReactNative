@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View  ,StatusBar,TextInput,ScrollView } from 'react-native'
+import { StyleSheet, Text, View  ,StatusBar,TextInput,ScrollView ,FlatList, Pressable} from 'react-native'
 import React from 'react'
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { Keyboard } from 'react-native';
 
 // constants
 import { currencyByRupee } from './constant';
 // components
 import CurrencyComp from './components/currencyButton';
 
-import snackbar from 'react-native-snackbar';
+import Snackbar from 'react-native-snackbar';
 
 
 
@@ -22,7 +22,8 @@ export default function App() {
 
   const buttonPressed = (targetCurrency: Currency) => {
     if(!inputvalue){ // checking if input value is empty
-      return snackbar.show({
+      Keyboard.dismiss();
+      return Snackbar.show({
         text: "Please enter a value",
         backgroundColor: "#EA7773",
         textColor: "#FFFFFF",
@@ -30,11 +31,14 @@ export default function App() {
     }
     const inputAmount = parseFloat(inputvalue) 
     if(!isNaN(inputAmount)){ // isNaN = is Not a Number // first convert it and then check if result is a number. if is a number then isNaN will return false. 
+      // checks if inputAmount is a number . if it is a number condition will be true.
+      // else condition will be false. and else block will be executed.
       const convertedValue = inputAmount * targetCurrency.value;
       setResultValue(`${targetCurrency.symbol} ${convertedValue.toFixed(2)}`); // toFixed(2) = to fixed 2 decimal places
       setTargetCurrency(targetCurrency.name);
     } else {
-      snackbar.show({
+      Keyboard.dismiss();
+      Snackbar.show({
         text: "Please enter a valid number",
         backgroundColor: "#EA7773",
         textColor: "#FFFFFF",
@@ -43,9 +47,9 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView  >
+    <SafeAreaView style={{flex:1}}>
       <StatusBar />
-      <ScrollView keyboardShouldPersistTaps='handled' >
+      <ScrollView keyboardShouldPersistTaps='handled' style={{flexGrow:1}}>
       <View style={styles.container} >
         <View style={styles.topContainer}>
           <View style={styles.rupeesContainer}>
@@ -60,8 +64,20 @@ export default function App() {
             />
           </View>
           {resultValue && (
-            <Text>{resultValue}</Text>
+            <Text style={styles.resultTxt}>{resultValue}</Text>
           )}
+        </View>
+        <View style={styles.bottomContainer}>
+          <FlatList
+            data={currencyByRupee}
+            keyExtractor={ (item) => item.name }
+            numColumns={3}
+            renderItem={ ({item}) => (
+              <Pressable style={[styles.button, targetCurrency === item.name && styles.selected]}   onPress={ () => buttonPressed(item)}>
+                <CurrencyComp  {...item}/>
+              </Pressable>
+            )}
+          />
         </View>
       </View>
       </ScrollView>
