@@ -30,7 +30,8 @@ import DiceSix from "../assets/Six.png"
 */
 
 type DiceImageType = PropsWithChildren<{
-  ImageUrl : ImageSourcePropType // Defining ImageUrl prop of type ImageSourcePropType
+  ImageUrl : ImageSourcePropType, // Defining ImageUrl prop of type ImageSourcePropType
+  children?: React.ReactNode
 }>
 
 const DiceImage =({ImageUrl}:DiceImageType):JSX.Element => { // Destructuring ImageUrl from props
